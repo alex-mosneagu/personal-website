@@ -1,13 +1,11 @@
-- value: 9<sup>+</sup>
-  label: Years experience
-
-- value: 4
-  label: Ventures
-
-- value: Web Summit<br><em class="lime">2025 · Portugal</em>
-  label: Presented at
-  isText: true
-
-- value: We Make Future<br><em class="lime">2026</em>
-  label: Showcased at
-  isText: true
+items:
+  - value: 9<sup>+</sup>
+    label: Years experience
+  - value: 4
+    label: Ventures
+  - value: Web Summit<br><em class="lime">2025 · Portugal</em>
+    label: Presented at
+    isText: true
+  - value: We Make Future<br><em class="lime">2026</em>
+    label: Showcased at
+    isText: true

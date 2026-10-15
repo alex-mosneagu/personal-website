@@ -325,18 +325,35 @@ export default defineComponent({
   
   computed: {
     stats(): Stat[] {
-      if (!this.statsData?.body) return []
-      return this.statsData.body as unknown as Stat[]
+      if (!this.statsData?.items) return []
+      return this.statsData.items as unknown as Stat[]
     },
     
     journey(): Journey[] {
-      if (!this.journeyData?.body) return []
-      return this.journeyData.body as unknown as Journey[]
+      if (!this.journeyData?.items) return []
+      return this.journeyData.items as unknown as Journey[]
     },
     
     aboutHtml(): string {
-      if (!this.aboutData?.body?.children) return ''
-      return this.renderMarkdown(this.aboutData.body.children)
+      if (!this.aboutData?.body) return ''
+      // Extract text content from parsed markdown
+      const extractText = (node: any): string => {
+        if (!node) return ''
+        if (typeof node === 'string') return node
+        if (node.type === 'text') return node.value || ''
+        if (node.type === 'element' || node.type === 'root') {
+          const tag = node.tag || ''
+          const children = node.children || []
+          const content = children.map((child: any) => extractText(child)).join('')
+          if (tag) return `<${tag}>${content}</${tag}>`
+          return content
+        }
+        if (Array.isArray(node)) {
+          return node.map(n => extractText(n)).join('')
+        }
+        return ''
+      }
+      return extractText(this.aboutData.body)
     },
     
     skills(): string[] {
@@ -364,19 +381,6 @@ export default defineComponent({
         'On market': 'mk'
       }
       return map[st] || ''
-    },
-    
-    renderMarkdown(children: any[]): string {
-      return children.map(child => {
-        if (child.type === 'text') {
-          return child.value
-        }
-        if (child.type === 'element') {
-          const inner = child.children ? this.renderMarkdown(child.children) : ''
-          return `<${child.tag}>${inner}</${child.tag}>`
-        }
-        return ''
-      }).join('')
     }
   },
   
