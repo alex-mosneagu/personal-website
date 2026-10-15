@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="post">
     <header
       id="top"
       class="ph art-h"

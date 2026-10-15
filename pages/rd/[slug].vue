@@ -128,16 +128,16 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const { data: rd } = useAsyncData(`rd-${route.params.slug}`, () =>
-      queryContent('rd', route.params.slug as string).findOne(),
+      queryContent<RDItem>('rd', route.params.slug as string).findOne(),
     )
 
     const { data: allRD } = useAsyncData('all-rd', () =>
-      queryContent('rd').sort({ order: 1 }).find(),
+      queryContent<RDItem>('rd').sort({ order: 1 }).find(),
     )
 
     return {
-      rd,
-      allRD,
+      rd: rd as Ref<RDItem | null>,
+      allRD: allRD as Ref<RDItem[] | null>,
     }
   },
 
@@ -173,19 +173,19 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.rd || !this.allRD) return 0
-      return this.allRD.findIndex(r => r.slug === this.rd.slug)
+      return this.allRD.findIndex(r => r.slug === this.rd!.slug)
     },
 
     prevRD(): RDItem | null {
       if (!this.allRD?.length) return null
       const prevIndex = this.currentIndex - 1
-      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex] as RDItem
+      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex] || null
     },
 
     nextRD(): RDItem | null {
       if (!this.allRD?.length) return null
       const nextIndex = this.currentIndex + 1
-      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex] as RDItem
+      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex] || null
     },
   },
 

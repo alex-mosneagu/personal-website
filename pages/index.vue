@@ -384,18 +384,18 @@ export default defineComponent({
     const { data: aboutData } = useAsyncData('about', () => queryContent('about').findOne())
     const { data: statsData } = useAsyncData('stats', () => queryContent('stats').findOne())
     const { data: journeyData } = useAsyncData('journey', () => queryContent('journey').findOne())
-    const { data: ventures } = useAsyncData('ventures', () => queryContent('ventures').sort({ order: 1 }).find())
+    const { data: ventures } = useAsyncData('ventures', () => queryContent<Venture>('ventures').sort({ order: 1 }).find())
     const { data: projects } = useAsyncData('projects', () => queryContent('projects').sort({ order: 1 }).find())
-    const { data: rdItems } = useAsyncData('rd', () => queryContent('rd').sort({ order: 1 }).find())
+    const { data: rdItems } = useAsyncData('rd', () => queryContent<RDItem>('rd').sort({ order: 1 }).find())
     const { data: blogPosts } = useAsyncData('blog', () => queryContent('blog').sort({ order: 1 }).find())
 
     return {
       aboutData,
       statsData,
       journeyData,
-      ventures,
+      ventures: ventures as Ref<Venture[] | null>,
       projects,
-      rdItems,
+      rdItems: rdItems as Ref<RDItem[] | null>,
       blogPosts,
     }
   },
@@ -446,11 +446,13 @@ export default defineComponent({
     },
 
     showcaseRD(): RDItem | null {
-      return this.rdItems?.find((item: RDItem) => item.showcase) || null
+      if (!this.rdItems) return null
+      return this.rdItems.find(item => item.showcase) || null
     },
 
     labItems(): RDItem[] {
-      return this.rdItems?.filter((item: RDItem) => !item.showcase) || []
+      if (!this.rdItems) return []
+      return this.rdItems.filter(item => !item.showcase)
     },
   },
 

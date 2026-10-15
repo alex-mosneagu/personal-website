@@ -137,16 +137,16 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const { data: venture } = useAsyncData(`venture-${route.params.slug}`, () =>
-      queryContent('ventures', route.params.slug as string).findOne(),
+      queryContent<Venture>('ventures', route.params.slug as string).findOne(),
     )
 
     const { data: allVentures } = useAsyncData('all-ventures', () =>
-      queryContent('ventures').sort({ order: 1 }).find(),
+      queryContent<Venture>('ventures').sort({ order: 1 }).find(),
     )
 
     return {
-      venture,
-      allVentures,
+      venture: venture as Ref<Venture | null>,
+      allVentures: allVentures as Ref<Venture[] | null>,
     }
   },
 
@@ -176,7 +176,7 @@ export default defineComponent({
 
     ventureNumber(): string {
       if (!this.venture || !this.allVentures) return '01 of 04'
-      const index = this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
+      const index = this.allVentures.findIndex(v => v.slug === this.venture!.slug)
       return `0${index + 1} of 04`
     },
 
@@ -193,8 +193,8 @@ export default defineComponent({
       if (this.venture.inactive) {
         facts.push({ label: 'Status', value: 'Inactive' })
       }
-      else if (this.allVentures) {
-        const index = this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
+      else if (this.allVentures && this.venture) {
+        const index = this.allVentures.findIndex(v => v.slug === this.venture!.slug)
         facts.push({ label: 'Venture', value: `0${index + 1} of 04` })
       }
 
@@ -216,19 +216,19 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.venture || !this.allVentures) return 0
-      return this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
+      return this.allVentures.findIndex(v => v.slug === this.venture!.slug)
     },
 
     prevVenture(): Venture | null {
       if (!this.allVentures?.length) return null
       const prevIndex = this.currentIndex - 1
-      return this.allVentures[prevIndex < 0 ? this.allVentures.length - 1 : prevIndex]
+      return this.allVentures[prevIndex < 0 ? this.allVentures.length - 1 : prevIndex] || null
     },
 
     nextVenture(): Venture | null {
       if (!this.allVentures?.length) return null
       const nextIndex = this.currentIndex + 1
-      return this.allVentures[nextIndex >= this.allVentures.length ? 0 : nextIndex]
+      return this.allVentures[nextIndex >= this.allVentures.length ? 0 : nextIndex] || null
     },
   },
 

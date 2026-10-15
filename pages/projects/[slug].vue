@@ -129,16 +129,16 @@ export default defineComponent({
   setup() {
     const route = useRoute()
     const { data: project } = useAsyncData(`project-${route.params.slug}`, () =>
-      queryContent('projects', route.params.slug as string).findOne(),
+      queryContent<Project>('projects', route.params.slug as string).findOne(),
     )
 
     const { data: allProjects } = useAsyncData('all-projects', () =>
-      queryContent('projects').sort({ order: 1 }).find(),
+      queryContent<Project>('projects').sort({ order: 1 }).find(),
     )
 
     return {
-      project,
-      allProjects,
+      project: project as Ref<Project | null>,
+      allProjects: allProjects as Ref<Project[] | null>,
     }
   },
 
@@ -157,7 +157,7 @@ export default defineComponent({
 
   computed: {
     displayFacts(): Array<[string, string]> {
-      if (!this.project) return []
+      if (!this.project || !this.project.facts) return []
       const facts = this.project.facts.filter((f: [string, string]) => f[0] !== '—')
       if (facts.length < 4) {
         facts.push(['Category', this.project.cat])
@@ -167,19 +167,19 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.project || !this.allProjects) return 0
-      return this.allProjects.findIndex((p: Project) => p.slug === this.project.slug)
+      return this.allProjects.findIndex(p => p.slug === this.project!.slug)
     },
 
     prevProject(): Project | null {
       if (!this.allProjects?.length) return null
       const prevIndex = this.currentIndex - 1
-      return this.allProjects[prevIndex < 0 ? this.allProjects.length - 1 : prevIndex]
+      return this.allProjects[prevIndex < 0 ? this.allProjects.length - 1 : prevIndex] || null
     },
 
     nextProject(): Project | null {
       if (!this.allProjects?.length) return null
       const nextIndex = this.currentIndex + 1
-      return this.allProjects[nextIndex >= this.allProjects.length ? 0 : nextIndex]
+      return this.allProjects[nextIndex >= this.allProjects.length ? 0 : nextIndex] || null
     },
   },
 

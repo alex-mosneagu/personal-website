@@ -7,7 +7,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
-import type { Scene, WebGLRenderer, PerspectiveCamera, Points, Mesh, Raycaster, Plane, Vector2, Vector3, Clock } from 'three'
+import type { Scene, WebGLRenderer, PerspectiveCamera, Points, Mesh, Raycaster, Plane, Vector2, Vector3, Clock, ShaderMaterial } from 'three'
 
 export default defineComponent({
   name: 'HeroGL',
