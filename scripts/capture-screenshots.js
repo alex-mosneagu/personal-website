@@ -19,14 +19,15 @@ async function capture() {
     await heroPage.goto(`${baseUrl}/?static`, { waitUntil: 'networkidle' })
     await heroPage.evaluate(() => document.fonts.ready)
     await heroPage.waitForSelector('body[data-gl=ok]', { state: 'attached', timeout: 20000 }).catch(() => {})
-    await heroPage.waitForTimeout(1500)
-    await heroPage.screenshot({ path: 'screenshot-desktop-hero.png' })
+    // Wait longer for typing animation to complete
+    await heroPage.waitForTimeout(3500)
+    await heroPage.screenshot({ path: 'docs/screenshots/screenshot-desktop-hero.png' })
     console.log('✓ Desktop hero captured')
 
     // Desktop full page
     const height = await heroPage.evaluate(() => document.documentElement.scrollHeight)
     await heroPage.setViewportSize({ width: 1440, height })
-    await heroPage.screenshot({ path: 'screenshot-desktop-full.png', fullPage: true })
+    await heroPage.screenshot({ path: 'docs/screenshots/screenshot-desktop-full.png', fullPage: true })
     console.log('✓ Desktop full page captured')
     await heroPage.close()
 
