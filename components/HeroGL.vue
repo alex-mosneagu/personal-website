@@ -189,7 +189,7 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
         return
       }
 
-      const material = this.points.material as any
+      const material = this.points.material as ShaderMaterial
       const uniforms = material.uniforms
 
       uniforms.t.value = this.clock.getElapsedTime() + 4
@@ -246,13 +246,13 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
 
       if (this.points) {
         this.points.geometry.dispose()
-        const material = this.points.material as any
+        const material = this.points.material as ShaderMaterial
         material.dispose()
       }
 
       if (this.wireframe) {
         this.wireframe.geometry.dispose()
-        const material = this.wireframe.material as any
+        const material = this.wireframe.material as ShaderMaterial
         material.dispose()
       }
     },

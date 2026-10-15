@@ -320,6 +320,7 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { ParsedContent } from '@nuxt/content'
 
 interface Stat {
   value: string
@@ -334,6 +335,46 @@ interface Journey {
   isNow?: boolean
   isEducation?: boolean
   items: string[]
+}
+
+interface Venture extends ParsedContent {
+  slug: string
+  a: string
+  b: string
+  place: string
+  role: string
+  desc: string
+  products?: string[]
+  badge?: string
+  inactive?: boolean
+  lime?: boolean
+  order: number
+}
+
+interface _Project extends ParsedContent {
+  slug: string
+  name: string
+  tag: string
+  cat: string
+  line: string
+  order: number
+}
+
+interface RDItem extends ParsedContent {
+  slug: string
+  name: string
+  desc: string
+  st: string[]
+  showcase?: boolean
+  order: number
+}
+
+interface _BlogPost extends ParsedContent {
+  slug: string
+  n: string
+  tag: string
+  draft?: boolean
+  order: number
 }
 
 export default defineComponent({
@@ -404,17 +445,17 @@ export default defineComponent({
       return this.aboutData?.skills || []
     },
 
-    showcaseRD(): any {
-      return this.rdItems?.find((item: any) => item.showcase) || null
+    showcaseRD(): RDItem | null {
+      return this.rdItems?.find((item: RDItem) => item.showcase) || null
     },
 
-    labItems(): any[] {
-      return this.rdItems?.filter((item: any) => !item.showcase) || []
+    labItems(): RDItem[] {
+      return this.rdItems?.filter((item: RDItem) => !item.showcase) || []
     },
   },
 
   methods: {
-    ventureTitle(venture: any): string {
+    ventureTitle(venture: Venture): string {
       return `${venture.a}<em>${venture.b}</em>`
     },
 

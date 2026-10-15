@@ -116,6 +116,20 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { ParsedContent } from '@nuxt/content'
+
+interface Venture extends ParsedContent {
+  slug: string
+  a: string
+  b: string
+  place: string
+  role: string
+  desc: string
+  products?: string[]
+  badge?: string
+  inactive?: boolean
+  order: number
+}
 
 export default defineComponent({
   name: 'VenturePage',
@@ -162,7 +176,7 @@ export default defineComponent({
 
     ventureNumber(): string {
       if (!this.venture || !this.allVentures) return '01 of 04'
-      const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+      const index = this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
       return `0${index + 1} of 04`
     },
 
@@ -180,7 +194,7 @@ export default defineComponent({
         facts.push({ label: 'Status', value: 'Inactive' })
       }
       else if (this.allVentures) {
-        const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+        const index = this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
         facts.push({ label: 'Venture', value: `0${index + 1} of 04` })
       }
 
@@ -202,16 +216,16 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.venture || !this.allVentures) return 0
-      return this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+      return this.allVentures.findIndex((v: Venture) => v.slug === this.venture.slug)
     },
 
-    prevVenture(): any {
+    prevVenture(): Venture | null {
       if (!this.allVentures?.length) return null
       const prevIndex = this.currentIndex - 1
       return this.allVentures[prevIndex < 0 ? this.allVentures.length - 1 : prevIndex]
     },
 
-    nextVenture(): any {
+    nextVenture(): Venture | null {
       if (!this.allVentures?.length) return null
       const nextIndex = this.currentIndex + 1
       return this.allVentures[nextIndex >= this.allVentures.length ? 0 : nextIndex]

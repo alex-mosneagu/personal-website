@@ -1,4 +1,3 @@
-import { promises as fs } from 'fs'
 import { chromium } from 'playwright-core'
 
 const baseUrl = 'http://localhost:3001'
@@ -41,7 +40,7 @@ async function capture() {
     await mobilePage.waitForTimeout(1500)
     const mobileHeight = await mobilePage.evaluate(() => document.documentElement.scrollHeight)
     await mobilePage.setViewportSize({ width: 390, height: mobileHeight })
-    await mobilePage.screenshot({ path: 'screenshot-mobile.png', fullPage: true })
+    await mobilePage.screenshot({ path: 'docs/screenshots/screenshot-mobile.png', fullPage: true })
     console.log('✓ Mobile full page captured')
     await mobilePage.close()
 
@@ -51,7 +50,7 @@ async function capture() {
     await projectPage.waitForTimeout(800)
     const projectHeight = await projectPage.evaluate(() => document.documentElement.scrollHeight)
     await projectPage.setViewportSize({ width: 1440, height: projectHeight })
-    await projectPage.screenshot({ path: 'screenshot-project-valconf.png', fullPage: true })
+    await projectPage.screenshot({ path: 'docs/screenshots/screenshot-project-valconf.png', fullPage: true })
     console.log('✓ Project page captured')
     await projectPage.close()
 
@@ -61,7 +60,7 @@ async function capture() {
     await venturePage.waitForTimeout(800)
     const ventureHeight = await venturePage.evaluate(() => document.documentElement.scrollHeight)
     await venturePage.setViewportSize({ width: 1440, height: ventureHeight })
-    await venturePage.screenshot({ path: 'screenshot-venture-devolution.png', fullPage: true })
+    await venturePage.screenshot({ path: 'docs/screenshots/screenshot-venture-devolution.png', fullPage: true })
     console.log('✓ Venture page captured')
     await venturePage.close()
 
@@ -71,7 +70,7 @@ async function capture() {
     await blogPage.waitForTimeout(800)
     const blogHeight = await blogPage.evaluate(() => document.documentElement.scrollHeight)
     await blogPage.setViewportSize({ width: 1440, height: blogHeight })
-    await blogPage.screenshot({ path: 'screenshot-blog.png', fullPage: true })
+    await blogPage.screenshot({ path: 'docs/screenshots/screenshot-blog.png', fullPage: true })
     console.log('✓ Blog page captured')
     await blogPage.close()
 
@@ -81,7 +80,7 @@ async function capture() {
     await articlePage.waitForTimeout(800)
     const articleHeight = await articlePage.evaluate(() => document.documentElement.scrollHeight)
     await articlePage.setViewportSize({ width: 1440, height: articleHeight })
-    await articlePage.screenshot({ path: 'screenshot-article.png', fullPage: true })
+    await articlePage.screenshot({ path: 'docs/screenshots/screenshot-article.png', fullPage: true })
     console.log('✓ Article page captured')
     await articlePage.close()
 
@@ -91,7 +90,7 @@ async function capture() {
     await rdPage.waitForTimeout(800)
     const rdHeight = await rdPage.evaluate(() => document.documentElement.scrollHeight)
     await rdPage.setViewportSize({ width: 1440, height: rdHeight })
-    await rdPage.screenshot({ path: 'screenshot-rd-discrete.png', fullPage: true })
+    await rdPage.screenshot({ path: 'docs/screenshots/screenshot-rd-discrete.png', fullPage: true })
     console.log('✓ R&D page captured')
     await rdPage.close()
 

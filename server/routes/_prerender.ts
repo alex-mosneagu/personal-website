@@ -1,4 +1,9 @@
+import type { ParsedContent } from '@nuxt/content'
 import { serverQueryContent } from '#content/server'
+
+interface ContentItem extends ParsedContent {
+  slug: string
+}
 
 export default defineEventHandler(async (event) => {
   // This route is only used to provide additional routes for prerendering
@@ -11,9 +16,9 @@ export default defineEventHandler(async (event) => {
   ])
 
   const routes = [
-    ...ventures.map((v: any) => `/ventures/${v.slug}`),
-    ...projects.map((p: any) => `/projects/${p.slug}`),
-    ...rd.map((r: any) => `/rd/${r.slug}`),
+    ...ventures.map((v: ContentItem) => `/ventures/${v.slug}`),
+    ...projects.map((p: ContentItem) => `/projects/${p.slug}`),
+    ...rd.map((r: ContentItem) => `/rd/${r.slug}`),
   ]
 
   return {

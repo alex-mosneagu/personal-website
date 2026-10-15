@@ -111,6 +111,16 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { ParsedContent } from '@nuxt/content'
+
+interface RDItem extends ParsedContent {
+  slug: string
+  name: string
+  desc: string
+  st: string[]
+  points?: string[]
+  order: number
+}
 
 export default defineComponent({
   name: 'RDPage',
@@ -163,19 +173,19 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.rd || !this.allRD) return 0
-      return this.allRD.findIndex((r: any) => r.slug === this.rd.slug)
+      return this.allRD.findIndex(r => r.slug === this.rd.slug)
     },
 
-    prevRD(): any {
+    prevRD(): RDItem | null {
       if (!this.allRD?.length) return null
       const prevIndex = this.currentIndex - 1
-      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex]
+      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex] as RDItem
     },
 
-    nextRD(): any {
+    nextRD(): RDItem | null {
       if (!this.allRD?.length) return null
       const nextIndex = this.currentIndex + 1
-      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex]
+      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex] as RDItem
     },
   },
 

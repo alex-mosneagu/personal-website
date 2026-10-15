@@ -110,6 +110,18 @@
 
 <script lang="ts">
 import { defineComponent } from 'vue'
+import type { ParsedContent } from '@nuxt/content'
+
+interface Project extends ParsedContent {
+  slug: string
+  name: string
+  tag: string
+  cat: string
+  line: string
+  facts?: Array<[string, string]>
+  feats?: string[]
+  order: number
+}
 
 export default defineComponent({
   name: 'ProjectPage',
@@ -155,16 +167,16 @@ export default defineComponent({
 
     currentIndex(): number {
       if (!this.project || !this.allProjects) return 0
-      return this.allProjects.findIndex((p: any) => p.slug === this.project.slug)
+      return this.allProjects.findIndex((p: Project) => p.slug === this.project.slug)
     },
 
-    prevProject(): any {
+    prevProject(): Project | null {
       if (!this.allProjects?.length) return null
       const prevIndex = this.currentIndex - 1
       return this.allProjects[prevIndex < 0 ? this.allProjects.length - 1 : prevIndex]
     },
 
-    nextProject(): any {
+    nextProject(): Project | null {
       if (!this.allProjects?.length) return null
       const nextIndex = this.currentIndex + 1
       return this.allProjects[nextIndex >= this.allProjects.length ? 0 : nextIndex]

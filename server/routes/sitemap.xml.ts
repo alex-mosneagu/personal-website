@@ -1,4 +1,9 @@
+import type { ParsedContent } from '@nuxt/content'
 import { serverQueryContent } from '#content/server'
+
+interface ContentItem extends ParsedContent {
+  slug: string
+}
 
 export default defineEventHandler(async (event) => {
   const config = useRuntimeConfig()
@@ -17,10 +22,10 @@ export default defineEventHandler(async (event) => {
   ]
 
   const dynamicPages = [
-    ...ventures.map((v: any) => `/ventures/${v.slug}`),
-    ...projects.map((p: any) => `/projects/${p.slug}`),
-    ...rd.map((r: any) => `/rd/${r.slug}`),
-    ...blog.map((b: any) => `/blog/${b.slug}`),
+    ...ventures.map((v: ContentItem) => `/ventures/${v.slug}`),
+    ...projects.map((p: ContentItem) => `/projects/${p.slug}`),
+    ...rd.map((r: ContentItem) => `/rd/${r.slug}`),
+    ...blog.map((b: ContentItem) => `/blog/${b.slug}`),
   ]
 
   const allPages = [...staticPages, ...dynamicPages]
