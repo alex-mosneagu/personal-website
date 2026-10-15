@@ -283,31 +283,38 @@ interface Journey {
 export default defineComponent({
   name: 'IndexPage',
   
-  async setup() {
-    const { data: aboutData } = await useAsyncData('about', () => queryContent('about').findOne())
-    const { data: statsData } = await useAsyncData('stats', () => queryContent('stats').findOne())
-    const { data: journeyData } = await useAsyncData('journey', () => queryContent('journey').findOne())
-    const { data: ventures } = await useAsyncData('ventures', () => 
-      queryContent('ventures').sort({ order: 1 }).find()
-    )
-    const { data: projects } = await useAsyncData('projects', () => 
-      queryContent('projects').sort({ order: 1 }).find()
-    )
-    const { data: rdItems } = await useAsyncData('rd', () => 
-      queryContent('rd').sort({ order: 1 }).find()
-    )
-    const { data: blogPosts } = await useAsyncData('blog', () => 
-      queryContent('blog').sort({ order: 1 }).find()
-    )
-    
-    return {
-      aboutData,
-      statsData,
-      journeyData,
-      ventures,
-      projects,
-      rdItems,
-      blogPosts
+  async asyncData() {
+    try {
+      const [aboutData, statsData, journeyData, ventures, projects, rdItems, blogPosts] = await Promise.all([
+        queryContent('about').findOne(),
+        queryContent('stats').findOne(),
+        queryContent('journey').findOne(),
+        queryContent('ventures').sort({ order: 1 }).find(),
+        queryContent('projects').sort({ order: 1 }).find(),
+        queryContent('rd').sort({ order: 1 }).find(),
+        queryContent('blog').sort({ order: 1 }).find()
+      ])
+      
+      return {
+        aboutData,
+        statsData,
+        journeyData,
+        ventures,
+        projects,
+        rdItems,
+        blogPosts
+      }
+    } catch (error) {
+      console.error('Error loading content:', error)
+      return {
+        aboutData: null,
+        statsData: null,
+        journeyData: null,
+        ventures: [],
+        projects: [],
+        rdItems: [],
+        blogPosts: []
+      }
     }
   },
   
