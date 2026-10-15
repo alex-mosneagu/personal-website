@@ -4,7 +4,7 @@ n: '04'
 tag: Nuxt · Vue
 title: Structuring a Nuxt project with the Options API
 ex: The Options API still gives a Nuxt project a clear, predictable shape. Here is how I organize pages, components and data so the codebase stays easy to read and test.
-draft: false
+soon: false
 order: 4
 ---
 

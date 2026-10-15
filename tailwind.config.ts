@@ -1,6 +1,7 @@
 import type { Config } from 'tailwindcss'
 
 export default {
+  corePlugins: { preflight: false },
   content: [
     './components/**/*.{vue,js,ts}',
     './layouts/**/*.vue',

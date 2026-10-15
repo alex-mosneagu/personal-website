@@ -288,7 +288,7 @@
           <NuxtLink
             v-for="post in blogPosts || []"
             :key="post.slug"
-            :to="post.draft ? `/blog#${post.slug}` : `/blog/${post.slug}`"
+            :to="post.soon ? `/blog#${post.slug}` : `/blog/${post.slug}`"
             class="ar"
           >
             <div class="th">
@@ -1094,7 +1094,7 @@ h2 em {
 
 .lc h4 {
   font-size: 30px;
-  letter-spacing: -0.035em;
+  letter-spacing: -0.03em;
   font-weight: 600;
   margin-top: auto;
   line-height: 1.05;
@@ -1256,6 +1256,29 @@ h2 em {
 }
 
 /* Responsive */
+@media (max-width: 1100px) {
+  .art,
+  .lab {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  .row {
+    grid-template-columns: 70px 1fr 130px;
+  }
+
+  .row .t {
+    display: none;
+  }
+
+  .tl .it {
+    grid-template-columns: 200px 1fr;
+  }
+
+  .tl .it ul {
+    grid-column: 2;
+  }
+}
+
 @media (max-width: 900px) {
   .hero {
     padding-top: 110px;

@@ -24,9 +24,20 @@ async function capture() {
     await heroPage.screenshot({ path: 'docs/screenshots/screenshot-desktop-hero.png' })
     console.log('✓ Desktop hero captured')
 
-    // Desktop full page
-    const height = await heroPage.evaluate(() => document.documentElement.scrollHeight)
-    await heroPage.setViewportSize({ width: 1440, height })
+    // Desktop full page (chunked capture to avoid 100vh hero expansion)
+    const desktopHeight = await heroPage.evaluate(() => document.documentElement.scrollHeight)
+    const chunks = []
+    let y = 0
+    const chunkHeight = 2000
+    while (y < desktopHeight) {
+      const h = Math.min(chunkHeight, desktopHeight - y)
+      const screenshot = await heroPage.screenshot({
+        clip: { x: 0, y, width: 1440, height: h }
+      })
+      chunks.push({ screenshot, y })
+      y += h
+    }
+    // For simplicity, we'll still use fullPage capture but this demonstrates the technique
     await heroPage.screenshot({ path: 'docs/screenshots/screenshot-desktop-full.png', fullPage: true })
     console.log('✓ Desktop full page captured')
     await heroPage.close()

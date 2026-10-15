@@ -4,7 +4,7 @@ name: Discrete Profile
 st:
   - On market
   - AI
-desc: The first on-device marketing platform: an SDK that builds user profiles locally with machine learning.
+desc: 'The first on-device marketing platform: an SDK that builds user profiles locally with machine learning.'
 order: 7
 showcase: true
 points:

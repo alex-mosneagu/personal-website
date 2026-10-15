@@ -30,9 +30,9 @@
       <div class="wrap">
         <NuxtLink
           v-for="post in posts"
-          :id="post.draft ? post.slug : undefined"
+          :id="post.soon ? post.slug : undefined"
           :key="post.slug"
-          :to="post.draft ? `#${post.slug}` : `/blog/${post.slug}`"
+          :to="post.soon ? `#${post.slug}` : `/blog/${post.slug}`"
           class="brow"
         >
           <span class="i">{{ post.n }}</span>
@@ -43,9 +43,9 @@
           <span class="t">{{ post.tag }}</span>
           <span
             class="go"
-            :class="{ s: post.draft }"
+            :class="{ s: post.soon }"
           >
-            {{ post.draft ? 'Coming soon' : 'Read article →' }}
+            {{ post.soon ? 'Coming soon' : 'Read article →' }}
           </span>
         </NuxtLink>
       </div>

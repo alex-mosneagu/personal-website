@@ -6,7 +6,7 @@
 </template>
 
 <script lang="ts">
-import { defineComponent } from 'vue'
+import { defineComponent, markRaw } from 'vue'
 import type { Scene, WebGLRenderer, PerspectiveCamera, Points, Mesh, Raycaster, Plane, Vector2, Vector3, Clock, ShaderMaterial } from 'three'
 
 export default defineComponent({
@@ -55,9 +55,6 @@ export default defineComponent({
       if (!this.$refs.container) return
       const container = this.$refs.container as HTMLElement
       container.classList.add('static')
-      if (document.body) {
-        document.body.dataset.gl = 'ok'
-      }
     },
 
     async initThree() {
@@ -67,12 +64,12 @@ export default defineComponent({
         const THREE = await import('three')
         const container = this.$refs.container as HTMLElement
 
-        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true })
+        this.renderer = markRaw(new THREE.WebGLRenderer({ antialias: true, alpha: true }))
         this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
         container.appendChild(this.renderer.domElement)
 
-        this.scene = new THREE.Scene()
-        this.camera = new THREE.PerspectiveCamera(50, 1, 0.1, 100)
+        this.scene = markRaw(new THREE.Scene())
+        this.camera = markRaw(new THREE.PerspectiveCamera(50, 1, 0.1, 100))
         this.camera.position.set(0, 3.2, 7.5)
         this.camera.lookAt(0, 0, -1)
 
@@ -96,7 +93,7 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
 
         const fragmentShader = `uniform vec3 c;varying float vh;varying float vd;void main(){float r=length(gl_PointCoord-.5);if(r>.5)discard;float a=smoothstep(.5,0.,r)*clamp(.25+vh*.55,.08,1.)*smoothstep(16.,4.,vd);gl_FragColor=vec4(c*(.6+vh*.5),a);}`
 
-        this.points = new THREE.Points(
+        this.points = markRaw(new THREE.Points(
           geometry,
           new THREE.ShaderMaterial({
             uniforms,
@@ -106,13 +103,13 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
             depthWrite: false,
             blending: THREE.AdditiveBlending,
           }),
-        )
+        ))
         this.scene.add(this.points)
 
         const wireGeometry = new THREE.PlaneGeometry(22, 14, 60, 38)
         wireGeometry.rotateX(-Math.PI / 2)
 
-        this.wireframe = new THREE.Mesh(
+        this.wireframe = markRaw(new THREE.Mesh(
           wireGeometry,
           new THREE.ShaderMaterial({
             uniforms,
@@ -122,20 +119,20 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
             vertexShader: vertexShader.replace('gl_PointSize', 'float _ps'),
             fragmentShader: `uniform vec3 c;varying float vh;varying float vd;void main(){gl_FragColor=vec4(c,.07*smoothstep(16.,4.,vd));}`,
           }),
-        )
+        ))
         this.wireframe.position.y = -0.02
         this.scene.add(this.wireframe)
 
-        this.raycaster = new THREE.Raycaster()
-        this.plane = new THREE.Plane(new THREE.Vector3(0, 1, 0), 0)
-        this.target = new THREE.Vector2(2.5, 1)
-        this.mouseScreen = new THREE.Vector2()
-        this.hitPoint = new THREE.Vector3()
+        this.raycaster = markRaw(new THREE.Raycaster())
+        this.plane = markRaw(new THREE.Plane(new THREE.Vector3(0, 1, 0), 0))
+        this.target = markRaw(new THREE.Vector2(2.5, 1))
+        this.mouseScreen = markRaw(new THREE.Vector2())
+        this.hitPoint = markRaw(new THREE.Vector3())
 
         window.addEventListener('pointermove', this.onPointerMove)
         window.addEventListener('resize', this.onResize)
 
-        this.clock = new THREE.Clock()
+        this.clock = markRaw(new THREE.Clock())
         uniforms.m.value.copy(this.target)
 
         this.onResize()
@@ -186,6 +183,7 @@ h*=smoothstep(-.5,3.5,abs(p.x))*.9+.25;p.y=h;vh=h;vec4 mv=modelViewMatrix*vec4(p
 
     animate() {
       if (!this.isVisible || !this.renderer || !this.scene || !this.camera || !this.clock || !this.points || !this.target) {
+        this.animationFrame = null
         return
       }
 
