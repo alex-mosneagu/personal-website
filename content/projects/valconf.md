@@ -3,7 +3,7 @@ slug: valconf
 name: ValConf
 tag: Website · Editorial
 cat: Website
-line: Website for a premium apparel factory in Romania: editorial design, full-screen video hero.
+line: "Website for a premium apparel factory in Romania: editorial design, full-screen video hero."
 facts:
   - [Type, Website]
   - [Client, Premium apparel factory]

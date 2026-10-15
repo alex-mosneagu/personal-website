@@ -3,7 +3,7 @@ slug: luce-2025-shop
 name: Luce 2025 Shop
 tag: E-commerce · WooCommerce
 cat: E-commerce
-line: Official shop for the Vatican Jubilee 2025 mascot: international e-commerce on WooCommerce with custom design.
+line: "Official shop for the Vatican Jubilee 2025 mascot: international e-commerce on WooCommerce with custom design."
 facts:
   - [Type, E-commerce]
   - [Platform, WooCommerce]

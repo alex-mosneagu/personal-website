@@ -1,5 +1,5 @@
-import { chromium } from 'playwright-core'
 import { promises as fs } from 'fs'
+import { chromium } from 'playwright-core'
 
 const baseUrl = 'http://localhost:3000'
 
@@ -10,8 +10,8 @@ async function capture() {
       '--use-gl=angle',
       '--use-angle=swiftshader',
       '--enable-unsafe-swiftshader',
-      '--ignore-gpu-blocklist'
-    ]
+      '--ignore-gpu-blocklist',
+    ],
   })
 
   try {
@@ -34,7 +34,7 @@ async function capture() {
     // Mobile full page
     const mobilePage = await browser.newPage({
       viewport: { width: 390, height: 844 },
-      deviceScaleFactor: 2
+      deviceScaleFactor: 2,
     })
     await mobilePage.goto(`${baseUrl}/?static`, { waitUntil: 'networkidle' })
     await mobilePage.waitForSelector('body[data-gl=ok]', { state: 'attached', timeout: 20000 }).catch(() => {})
@@ -96,7 +96,8 @@ async function capture() {
     await rdPage.close()
 
     console.log('\n✅ All screenshots captured successfully')
-  } finally {
+  }
+  finally {
     await browser.close()
   }
 }

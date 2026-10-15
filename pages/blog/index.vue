@@ -1,18 +1,28 @@
 <template>
   <div>
-    <header id="top" class="ph">
+    <header
+      id="top"
+      class="ph"
+    >
       <div class="glow" />
       <div class="wrap">
         <div class="crumb">
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/">
+            Home
+          </NuxtLink>
           <span>/</span>
           <span>Blog</span>
         </div>
-        <div class="idx" style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--lime)">
+        <div
+          class="idx"
+          style="font-family: 'JetBrains Mono', monospace; font-size: 13px; color: var(--lime)"
+        >
           // blog
         </div>
         <h1>Notes &amp; <em>articles.</em></h1>
-        <p class="lead">Writing about frontend, R&amp;D and AI-assisted development.</p>
+        <p class="lead">
+          Writing about frontend, R&amp;D and AI-assisted development.
+        </p>
       </div>
     </header>
 
@@ -20,9 +30,9 @@
       <div class="wrap">
         <NuxtLink
           v-for="post in posts"
+          :id="post.draft ? post.slug : undefined"
           :key="post.slug"
           :to="post.draft ? `#${post.slug}` : `/blog/${post.slug}`"
-          :id="post.draft ? post.slug : undefined"
           class="brow"
         >
           <span class="i">{{ post.n }}</span>
@@ -31,7 +41,10 @@
             <p>{{ post.ex }}</p>
           </div>
           <span class="t">{{ post.tag }}</span>
-          <span class="go" :class="{ s: post.draft }">
+          <span
+            class="go"
+            :class="{ s: post.draft }"
+          >
             {{ post.draft ? 'Coming soon' : 'Read article →' }}
           </span>
         </NuxtLink>
@@ -45,28 +58,28 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'BlogPage',
-  
-  async setup() {
-    const { data: posts } = await useAsyncData('blog-posts', () =>
-      queryContent('blog').sort({ order: 1 }).find()
+
+  setup() {
+    const { data: posts } = useAsyncData('blog-posts', () =>
+      queryContent('blog').sort({ order: 1 }).find(),
     )
-    
+
     return {
-      posts
+      posts,
     }
   },
-  
+
   head() {
     return {
       title: 'Blog — Alex Mosneagu',
       meta: [
         {
           name: 'description',
-          content: 'Writing about frontend, R&D and AI-assisted development.'
-        }
-      ]
+          content: 'Writing about frontend, R&D and AI-assisted development.',
+        },
+      ],
     }
-  }
+  },
 })
 </script>
 
@@ -196,12 +209,12 @@ export default defineComponent({
   .ph {
     padding: 130px 0 50px;
   }
-  
+
   .brow {
     grid-template-columns: 44px 1fr;
     padding: 28px 0;
   }
-  
+
   .brow .t,
   .brow .go {
     grid-column: 2;

@@ -16,7 +16,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'AppFooter'
+  name: 'AppFooter',
 })
 </script>
 
@@ -80,7 +80,7 @@ export default defineComponent({
   .footer {
     padding-top: 60px;
   }
-  
+
   .base {
     padding: 20px;
   }

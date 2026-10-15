@@ -3,7 +3,7 @@ slug: nextservice
 name: NextService
 tag: Platform · Nuxt + Laravel
 cat: Platform
-line: Nuxt + Laravel service platform: REST API, customer flows, admin tooling, auth and role-based access. My own product.
+line: "Nuxt + Laravel service platform: REST API, customer flows, admin tooling, auth and role-based access. My own product."
 facts:
   - [Type, Service platform]
   - [Frontend, Nuxt]

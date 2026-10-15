@@ -6,7 +6,10 @@
       <i />
       <span>AlexMosneagu.vue</span>
     </div>
-    <pre class="code-content"><span v-html="displayHtml" /><span v-if="!isComplete" class="cursor" /></pre>
+    <pre class="code-content"><span v-html="displayHtml" /><span
+v-if="!isComplete"
+                                                                 class="cursor"
+    /></pre>
   </div>
 </template>
 
@@ -17,7 +20,7 @@ type Segment = [string, string]
 
 export default defineComponent({
   name: 'CodeTyping',
-  
+
   data() {
     return {
       src: [
@@ -25,46 +28,47 @@ export default defineComponent({
         ['', '\n<'],
         ['t', 'script'],
         ['', '>\nexport default {\n  name: '],
-        ['s', "'AlexMosneagu'"],
+        ['s', '\'AlexMosneagu\''],
         ['', ',\n  data() {\n    return {\n      role: '],
-        ['s', "'Frontend Tech Lead'"],
+        ['s', '\'Frontend Tech Lead\''],
         ['', ',\n      years: '],
-        ['s', "'9+'"],
+        ['s', '\'9+\''],
         ['', ',\n      city: '],
-        ['s', "'Bucharest'"],
-        ['', ",\n      stack: ['Vue', 'Nuxt', 'TS', 'React']\n    }\n  },\n  computed: {\n    focus() { return "],
-        ['s', "'full stack'"],
+        ['s', '\'Bucharest\''],
+        ['', ',\n      stack: [\'Vue\', \'Nuxt\', \'TS\', \'React\']\n    }\n  },\n  computed: {\n    focus() { return '],
+        ['s', '\'full stack\''],
         ['', ' }\n  },\n  methods: {\n    ship(idea) { '],
         ['c', '// idea → POC → market'],
         ['', '\n      return this.build(idea) }\n  }\n}\n</'],
         ['t', 'script'],
-        ['', '>']
+        ['', '>'],
       ] as Segment[],
       displayHtml: '',
       segmentIndex: 0,
       charIndex: 0,
       isComplete: false,
       intervalId: null as number | null,
-      prefersReducedMotion: false
+      prefersReducedMotion: false,
     }
   },
-  
+
   mounted() {
     this.prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches
-    
+
     if (this.prefersReducedMotion) {
       this.showComplete()
-    } else {
+    }
+    else {
       this.tick()
     }
   },
-  
+
   beforeUnmount() {
     if (this.intervalId) {
       clearTimeout(this.intervalId)
     }
   },
-  
+
   methods: {
     escapeHtml(text: string): string {
       return text
@@ -72,7 +76,7 @@ export default defineComponent({
         .replace(/</g, '&lt;')
         .replace(/>/g, '&gt;')
     },
-    
+
     showComplete() {
       this.displayHtml = this.src.map(([cls, text]) => {
         if (cls) {
@@ -83,44 +87,44 @@ export default defineComponent({
       this.segmentIndex = this.src.length
       this.isComplete = true
     },
-    
+
     tick() {
       if (this.segmentIndex >= this.src.length) {
         this.isComplete = true
         return
       }
-      
+
       const [cls, text] = this.src[this.segmentIndex]
       this.charIndex += 2
       const part = text.slice(0, this.charIndex)
       const currentSegment = cls
         ? `<span class="${cls}">${this.escapeHtml(part)}</span>`
         : this.escapeHtml(part)
-      
+
       const completedHtml = this.src
         .slice(0, this.segmentIndex)
         .map(([c, t]) => (c ? `<span class="${c}">${this.escapeHtml(t)}</span>` : this.escapeHtml(t)))
         .join('')
-      
+
       this.displayHtml = completedHtml + currentSegment
-      
+
       if (this.charIndex >= text.length) {
         const finalSegment = cls
           ? `<span class="${cls}">${this.escapeHtml(text)}</span>`
           : this.escapeHtml(text)
-        
+
         this.displayHtml = this.src
           .slice(0, this.segmentIndex)
           .map(([c, t]) => (c ? `<span class="${c}">${this.escapeHtml(t)}</span>` : this.escapeHtml(t)))
           .join('') + finalSegment
-        
+
         this.segmentIndex++
         this.charIndex = 0
       }
-      
+
       this.intervalId = window.setTimeout(() => this.tick(), 22)
-    }
-  }
+    },
+  },
 })
 </script>
 

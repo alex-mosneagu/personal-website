@@ -4,7 +4,7 @@ a: Devolution
 b: Zone
 place: White-label
 role: Administrator & Full Stack Developer
-desc: A white-label development department: web, marketing, AI and outsourcing.
+desc: "A white-label development department: web, marketing, AI and outsourcing."
 products:
   - Discrete Profile
 badge: Web Summit 2025 · Portugal

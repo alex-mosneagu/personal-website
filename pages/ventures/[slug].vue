@@ -1,12 +1,19 @@
 <template>
   <div>
-    <header id="top" class="ph">
+    <header
+      id="top"
+      class="ph"
+    >
       <div class="glow" />
       <div class="wrap">
         <div class="crumb">
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/">
+            Home
+          </NuxtLink>
           <span>/</span>
-          <NuxtLink to="/#ventures">Ventures</NuxtLink>
+          <NuxtLink to="/#ventures">
+            Ventures
+          </NuxtLink>
           <span>/</span>
           <span>{{ ventureName }}</span>
         </div>
@@ -14,11 +21,24 @@
           <span class="ai">Venture {{ ventureNumber }}</span>
         </div>
         <h1 v-html="ventureTitle" />
-        <p class="lead">{{ venture.desc }}</p>
-        <span v-if="venture.badge" class="bdg" style="margin-top: 26px">◆ {{ venture.badge }}</span>
-        <span v-else-if="venture.inactive" class="bdg in" style="margin-top: 26px">Inactive</span>
+        <p class="lead">
+          {{ venture.desc }}
+        </p>
+        <span
+          v-if="venture.badge"
+          class="bdg"
+          style="margin-top: 26px"
+        >◆ {{ venture.badge }}</span>
+        <span
+          v-else-if="venture.inactive"
+          class="bdg in"
+          style="margin-top: 26px"
+        >Inactive</span>
         <div class="facts">
-          <div v-for="(fact, i) in facts" :key="i">
+          <div
+            v-for="(fact, i) in facts"
+            :key="i"
+          >
             <span>{{ fact.label }}</span>
             <b>{{ fact.value }}</b>
           </div>
@@ -32,19 +52,31 @@
           <div class="idx">
             // about<b>01</b>
           </div>
-          <div class="body" v-html="bodyHtml" />
+          <div class="body">
+            <ContentRenderer
+              v-if="venture && venture.body"
+              :value="venture"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <section v-if="venture.products && venture.products.length" class="sx">
+    <section
+      v-if="venture.products && venture.products.length"
+      class="sx"
+    >
       <div class="wrap">
         <div class="txt">
           <div class="idx">
             // products<b>02</b>
           </div>
           <div>
-            <div class="pcards" style="margin-top: 0">
+            <div
+              v-if="venture && venture.products"
+              class="pcards"
+              style="margin-top: 0"
+            >
               <NuxtLink
                 v-for="product in venture.products"
                 :key="product"
@@ -64,7 +96,10 @@
 
     <section class="sx">
       <div class="wrap">
-        <div class="pn">
+        <div
+          v-if="prevVenture && nextVenture"
+          class="pn"
+        >
           <NuxtLink :to="`/ventures/${prevVenture.slug}`">
             <span>← Previous</span>
             <b>{{ prevVenture.a + prevVenture.b }}</b>
@@ -84,119 +119,23 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'VenturePage',
-  
-  async setup() {
+
+  setup() {
     const route = useRoute()
-    const { data: venture } = await useAsyncData(`venture-${route.params.slug}`, () =>
-      queryContent('ventures', route.params.slug as string).findOne()
+    const { data: venture } = useAsyncData(`venture-${route.params.slug}`, () =>
+      queryContent('ventures', route.params.slug as string).findOne(),
     )
-    
-    const { data: allVentures } = await useAsyncData('all-ventures', () =>
-      queryContent('ventures').sort({ order: 1 }).find()
+
+    const { data: allVentures } = useAsyncData('all-ventures', () =>
+      queryContent('ventures').sort({ order: 1 }).find(),
     )
-    
-    if (!venture.value) {
-      throw createError({ statusCode: 404, statusMessage: 'Venture not found' })
-    }
-    
+
     return {
       venture,
-      allVentures
+      allVentures,
     }
   },
-  
-  computed: {
-    ventureTitle(): string {
-      if (!this.venture) return ''
-      return `${this.venture.a}<em>${this.venture.b}</em>`
-    },
-    
-    ventureName(): string {
-      if (!this.venture) return ''
-      return this.venture.a + this.venture.b
-    },
-    
-    ventureNumber(): string {
-      if (!this.venture || !this.allVentures) return '01 of 04'
-      const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
-      return `0${index + 1} of 04`
-    },
-    
-    facts(): Array<{ label: string; value: string }> {
-      if (!this.venture) return []
-      const facts = [
-        { label: 'Role', value: this.venture.role },
-        { 
-          label: this.venture.place === 'Italy' ? 'Country' : 'Type', 
-          value: this.venture.place 
-        }
-      ]
-      
-      if (this.venture.inactive) {
-        facts.push({ label: 'Status', value: 'Inactive' })
-      } else if (this.allVentures) {
-        const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
-        facts.push({ label: 'Venture', value: `0${index + 1} of 04` })
-      }
-      
-      if (this.venture.products && this.venture.products.length) {
-        facts.push({ label: 'Products', value: this.venture.products.join(' · ') })
-      } else if (this.venture.badge) {
-        facts.push({ label: 'Showcased', value: this.venture.badge })
-      } else if (this.venture.desc) {
-        facts.push({ 
-          label: 'Focus', 
-          value: this.venture.desc.replace(' The studio is currently inactive', '').replace(/\.$/, '') 
-        })
-      }
-      
-      return facts
-    },
-    
-    bodyHtml(): string {
-      if (!this.venture?.body?.children) return ''
-      return this.renderMarkdown(this.venture.body.children)
-    },
-    
-    currentIndex(): number {
-      if (!this.venture || !this.allVentures) return 0
-      return this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
-    },
-    
-    prevVenture(): any {
-      if (!this.allVentures?.length) return null
-      const prevIndex = this.currentIndex - 1
-      return this.allVentures[prevIndex < 0 ? this.allVentures.length - 1 : prevIndex]
-    },
-    
-    nextVenture(): any {
-      if (!this.allVentures?.length) return null
-      const nextIndex = this.currentIndex + 1
-      return this.allVentures[nextIndex >= this.allVentures.length ? 0 : nextIndex]
-    }
-  },
-  
-  methods: {
-    productLink(product: string): string {
-      if (product === 'Discrete Profile') return '/rd/discrete-profile'
-      if (product === 'LiveFlow Academy') return '/projects/liveflow-academy'
-      return ''
-    },
-    
-    renderMarkdown(children: any[]): string {
-      return children.map(child => {
-        if (child.type === 'text') {
-          return child.value
-        }
-        if (child.type === 'element') {
-          const inner = child.children ? this.renderMarkdown(child.children) : ''
-          return `<${child.tag}>${inner}</${child.tag}>`
-        }
-        return ''
-      }).join('')
-    }
-  },
-  
+
   head() {
     if (!this.venture) return {}
     return {
@@ -204,11 +143,88 @@ export default defineComponent({
       meta: [
         {
           name: 'description',
-          content: this.venture.desc
-        }
-      ]
+          content: this.venture.desc,
+        },
+      ],
     }
-  }
+  },
+
+  computed: {
+    ventureTitle(): string {
+      if (!this.venture) return ''
+      return `${this.venture.a}<em>${this.venture.b}</em>`
+    },
+
+    ventureName(): string {
+      if (!this.venture) return ''
+      return this.venture.a + this.venture.b
+    },
+
+    ventureNumber(): string {
+      if (!this.venture || !this.allVentures) return '01 of 04'
+      const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+      return `0${index + 1} of 04`
+    },
+
+    facts(): Array<{ label: string, value: string }> {
+      if (!this.venture) return []
+      const facts = [
+        { label: 'Role', value: this.venture.role },
+        {
+          label: this.venture.place === 'Italy' ? 'Country' : 'Type',
+          value: this.venture.place,
+        },
+      ]
+
+      if (this.venture.inactive) {
+        facts.push({ label: 'Status', value: 'Inactive' })
+      }
+      else if (this.allVentures) {
+        const index = this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+        facts.push({ label: 'Venture', value: `0${index + 1} of 04` })
+      }
+
+      if (this.venture.products && this.venture.products.length) {
+        facts.push({ label: 'Products', value: this.venture.products.join(' · ') })
+      }
+      else if (this.venture.badge) {
+        facts.push({ label: 'Showcased', value: this.venture.badge })
+      }
+      else if (this.venture.desc) {
+        facts.push({
+          label: 'Focus',
+          value: this.venture.desc.replace(' The studio is currently inactive', '').replace(/\.$/, ''),
+        })
+      }
+
+      return facts
+    },
+
+    currentIndex(): number {
+      if (!this.venture || !this.allVentures) return 0
+      return this.allVentures.findIndex((v: any) => v.slug === this.venture.slug)
+    },
+
+    prevVenture(): any {
+      if (!this.allVentures?.length) return null
+      const prevIndex = this.currentIndex - 1
+      return this.allVentures[prevIndex < 0 ? this.allVentures.length - 1 : prevIndex]
+    },
+
+    nextVenture(): any {
+      if (!this.allVentures?.length) return null
+      const nextIndex = this.currentIndex + 1
+      return this.allVentures[nextIndex >= this.allVentures.length ? 0 : nextIndex]
+    },
+  },
+
+  methods: {
+    productLink(product: string): string {
+      if (product === 'Discrete Profile') return '/rd/discrete-profile'
+      if (product === 'LiveFlow Academy') return '/projects/liveflow-academy'
+      return ''
+    },
+  },
 })
 </script>
 
@@ -483,53 +499,53 @@ export default defineComponent({
   .ph {
     padding: 130px 0 50px;
   }
-  
+
   .facts {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .facts div {
     padding: 20px 16px 20px 0;
     border-bottom: 1px solid var(--line);
   }
-  
+
   .facts div:nth-child(2n) {
     padding-left: 20px;
     border-right: 0;
   }
-  
+
   .facts div:nth-child(odd) {
     padding-left: 0;
   }
-  
+
   .txt {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .body :deep(p) {
     font-size: 20px;
   }
-  
+
   .pcards {
     grid-template-columns: 1fr;
   }
-  
+
   .pn {
     grid-template-columns: 1fr;
   }
-  
+
   .pn a:last-child {
     border-left: 0;
     border-top: 1px solid var(--line);
     text-align: left;
     padding-left: 0;
   }
-  
+
   .pn a:first-child {
     padding-right: 0;
   }
-  
+
   .sx {
     padding: 70px 0 20px;
   }

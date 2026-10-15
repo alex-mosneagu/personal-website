@@ -1,24 +1,43 @@
 <template>
   <div>
-    <header id="top" class="ph">
+    <header
+      id="top"
+      class="ph"
+    >
       <div class="glow" />
       <div class="wrap">
         <div class="crumb">
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/">
+            Home
+          </NuxtLink>
           <span>/</span>
-          <NuxtLink to="/#rd">R&amp;D</NuxtLink>
+          <NuxtLink to="/#rd">
+            R&amp;D
+          </NuxtLink>
           <span>/</span>
           <span>{{ rd.name }}</span>
         </div>
         <div class="bd">
-          <span v-for="st in rd.st" :key="st" :class="badgeClass(st)">{{ st }}</span>
+          <span
+            v-for="st in rd.st"
+            :key="st"
+            :class="badgeClass(st)"
+          >{{ st }}</span>
         </div>
         <h1 :style="{ fontSize: titleSize }">
           {{ rd.name }}
         </h1>
-        <p class="lead">{{ rd.desc }}</p>
-        <div class="facts" style="grid-template-columns: repeat(3, 1fr)">
-          <div v-for="(fact, i) in facts" :key="i">
+        <p class="lead">
+          {{ rd.desc }}
+        </p>
+        <div
+          class="facts"
+          style="grid-template-columns: repeat(3, 1fr)"
+        >
+          <div
+            v-for="(fact, i) in facts"
+            :key="i"
+          >
             <span>{{ fact.label }}</span>
             <b>{{ fact.value }}</b>
           </div>
@@ -32,20 +51,35 @@
           <div class="idx">
             // overview<b>01</b>
           </div>
-          <div class="body" v-html="bodyHtml" />
+          <div class="body">
+            <ContentRenderer
+              v-if="rd && rd.body"
+              :value="rd"
+            />
+          </div>
         </div>
       </div>
     </section>
 
-    <section v-if="rd.slug === 'discrete-profile'" class="sx">
+    <section
+      v-if="rd.slug === 'discrete-profile'"
+      class="sx"
+    >
       <div class="wrap">
         <div class="txt">
           <div class="idx">
             // how it works<b>02</b>
           </div>
           <div>
-            <div class="feat" style="margin-top: 0; grid-template-columns: repeat(2, 1fr)">
-              <div v-for="(point, i) in rd.points" :key="i">
+            <div
+              v-if="rd && rd.points"
+              class="feat"
+              style="margin-top: 0; grid-template-columns: repeat(2, 1fr)"
+            >
+              <div
+                v-for="(point, i) in rd.points"
+                :key="i"
+              >
                 <span>0{{ i + 1 }}</span>
                 <h4>{{ point }}</h4>
               </div>
@@ -57,7 +91,10 @@
 
     <section class="sx">
       <div class="wrap">
-        <div class="pn">
+        <div
+          v-if="prevRD && nextRD"
+          class="pn"
+        >
           <NuxtLink :to="`/rd/${prevRD.slug}`">
             <span>← Previous</span>
             <b>{{ prevRD.name }}</b>
@@ -77,91 +114,23 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'RDPage',
-  
-  async setup() {
+
+  setup() {
     const route = useRoute()
-    const { data: rd } = await useAsyncData(`rd-${route.params.slug}`, () =>
-      queryContent('rd', route.params.slug as string).findOne()
+    const { data: rd } = useAsyncData(`rd-${route.params.slug}`, () =>
+      queryContent('rd', route.params.slug as string).findOne(),
     )
-    
-    const { data: allRD } = await useAsyncData('all-rd', () =>
-      queryContent('rd').sort({ order: 1 }).find()
+
+    const { data: allRD } = useAsyncData('all-rd', () =>
+      queryContent('rd').sort({ order: 1 }).find(),
     )
-    
-    if (!rd.value) {
-      throw createError({ statusCode: 404, statusMessage: 'R&D item not found' })
-    }
-    
+
     return {
       rd,
-      allRD
+      allRD,
     }
   },
-  
-  computed: {
-    titleSize(): string {
-      if (!this.rd) return 'clamp(44px, 9vw, 148px)'
-      return this.rd.name.length > 20 
-        ? 'clamp(44px, 6vw, 96px)' 
-        : 'clamp(44px, 9vw, 148px)'
-    },
-    
-    facts(): Array<{ label: string; value: string }> {
-      if (!this.rd) return []
-      return [
-        { label: 'Status', value: this.rd.st.join(' · ') },
-        { label: 'Type', value: this.rd.slug === 'discrete-profile' ? 'Product' : 'R&D project' },
-        { label: 'Section', value: 'R&D Lab' }
-      ]
-    },
-    
-    bodyHtml(): string {
-      if (!this.rd?.body?.children) return ''
-      return this.renderMarkdown(this.rd.body.children)
-    },
-    
-    currentIndex(): number {
-      if (!this.rd || !this.allRD) return 0
-      return this.allRD.findIndex((r: any) => r.slug === this.rd.slug)
-    },
-    
-    prevRD(): any {
-      if (!this.allRD?.length) return null
-      const prevIndex = this.currentIndex - 1
-      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex]
-    },
-    
-    nextRD(): any {
-      if (!this.allRD?.length) return null
-      const nextIndex = this.currentIndex + 1
-      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex]
-    }
-  },
-  
-  methods: {
-    badgeClass(st: string): string {
-      const map: Record<string, string> = {
-        'POC': 'poc',
-        'AI': 'ai',
-        'On market': 'mk'
-      }
-      return map[st] || ''
-    },
-    
-    renderMarkdown(children: any[]): string {
-      return children.map(child => {
-        if (child.type === 'text') {
-          return child.value
-        }
-        if (child.type === 'element') {
-          const inner = child.children ? this.renderMarkdown(child.children) : ''
-          return `<${child.tag}>${inner}</${child.tag}>`
-        }
-        return ''
-      }).join('')
-    }
-  },
-  
+
   head() {
     if (!this.rd) return {}
     return {
@@ -169,11 +138,57 @@ export default defineComponent({
       meta: [
         {
           name: 'description',
-          content: this.rd.desc
-        }
-      ]
+          content: this.rd.desc,
+        },
+      ],
     }
-  }
+  },
+
+  computed: {
+    titleSize(): string {
+      if (!this.rd) return 'clamp(44px, 9vw, 148px)'
+      return this.rd.name.length > 20
+        ? 'clamp(44px, 6vw, 96px)'
+        : 'clamp(44px, 9vw, 148px)'
+    },
+
+    facts(): Array<{ label: string, value: string }> {
+      if (!this.rd) return []
+      return [
+        { label: 'Status', value: this.rd.st.join(' · ') },
+        { label: 'Type', value: this.rd.slug === 'discrete-profile' ? 'Product' : 'R&D project' },
+        { label: 'Section', value: 'R&D Lab' },
+      ]
+    },
+
+    currentIndex(): number {
+      if (!this.rd || !this.allRD) return 0
+      return this.allRD.findIndex((r: any) => r.slug === this.rd.slug)
+    },
+
+    prevRD(): any {
+      if (!this.allRD?.length) return null
+      const prevIndex = this.currentIndex - 1
+      return this.allRD[prevIndex < 0 ? this.allRD.length - 1 : prevIndex]
+    },
+
+    nextRD(): any {
+      if (!this.allRD?.length) return null
+      const nextIndex = this.currentIndex + 1
+      return this.allRD[nextIndex >= this.allRD.length ? 0 : nextIndex]
+    },
+  },
+
+  methods: {
+    badgeClass(st: string): string {
+      const map: Record<string, string> = {
+        'POC': 'poc',
+        'AI': 'ai',
+        'On market': 'mk',
+      }
+      return map[st] || ''
+    },
+  },
 })
 </script>
 
@@ -417,53 +432,53 @@ export default defineComponent({
   .ph {
     padding: 130px 0 50px;
   }
-  
+
   .facts {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .facts div {
     padding: 20px 16px 20px 0;
     border-bottom: 1px solid var(--line);
   }
-  
+
   .facts div:nth-child(2n) {
     padding-left: 20px;
     border-right: 0;
   }
-  
+
   .facts div:nth-child(odd) {
     padding-left: 0;
   }
-  
+
   .txt {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .body :deep(p) {
     font-size: 20px;
   }
-  
+
   .feat {
     grid-template-columns: 1fr;
   }
-  
+
   .pn {
     grid-template-columns: 1fr;
   }
-  
+
   .pn a:last-child {
     border-left: 0;
     border-top: 1px solid var(--line);
     text-align: left;
     padding-left: 0;
   }
-  
+
   .pn a:first-child {
     padding-right: 0;
   }
-  
+
   .sx {
     padding: 70px 0 20px;
   }

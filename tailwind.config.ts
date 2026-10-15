@@ -7,7 +7,7 @@ export default {
     './pages/**/*.vue',
     './composables/**/*.{js,ts}',
     './plugins/**/*.{js,ts}',
-    './app.vue'
+    './app.vue',
   ],
   theme: {
     extend: {
@@ -17,14 +17,14 @@ export default {
         fg: '#fff',
         mut: '#8a8a8a',
         line: 'rgba(255,255,255,.1)',
-        card: '#121212'
+        card: '#121212',
       },
       fontFamily: {
         sans: ['Inter Tight', 'sans-serif'],
         serif: ['Instrument Serif', 'serif'],
-        mono: ['JetBrains Mono', 'monospace']
-      }
-    }
+        mono: ['JetBrains Mono', 'monospace'],
+      },
+    },
   },
-  plugins: []
+  plugins: [],
 } satisfies Config

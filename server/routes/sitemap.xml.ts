@@ -8,19 +8,19 @@ export default defineEventHandler(async (event) => {
     serverQueryContent(event, 'ventures').find(),
     serverQueryContent(event, 'projects').find(),
     serverQueryContent(event, 'rd').find(),
-    serverQueryContent(event, 'blog').where({ draft: { $ne: true } }).find()
+    serverQueryContent(event, 'blog').where({ draft: { $ne: true } }).find(),
   ])
 
   const staticPages = [
     '',
-    '/blog'
+    '/blog',
   ]
 
   const dynamicPages = [
     ...ventures.map((v: any) => `/ventures/${v.slug}`),
     ...projects.map((p: any) => `/projects/${p.slug}`),
     ...rd.map((r: any) => `/rd/${r.slug}`),
-    ...blog.map((b: any) => `/blog/${b.slug}`)
+    ...blog.map((b: any) => `/blog/${b.slug}`),
   ]
 
   const allPages = [...staticPages, ...dynamicPages]

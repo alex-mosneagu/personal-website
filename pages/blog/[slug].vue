@@ -1,12 +1,19 @@
 <template>
   <div>
-    <header id="top" class="ph art-h">
+    <header
+      id="top"
+      class="ph art-h"
+    >
       <div class="glow" />
       <div class="wrap">
         <div class="crumb">
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/">
+            Home
+          </NuxtLink>
           <span>/</span>
-          <NuxtLink to="/blog">Blog</NuxtLink>
+          <NuxtLink to="/blog">
+            Blog
+          </NuxtLink>
           <span>/</span>
           <span>{{ post.title }}</span>
         </div>
@@ -14,14 +21,18 @@
           <span class="ai">{{ post.tag }}</span>
         </div>
         <h1 v-html="articleTitle" />
-        <p class="lead">{{ post.ex }}</p>
+        <p class="lead">
+          {{ post.ex }}
+        </p>
       </div>
     </header>
 
     <article class="post">
       <ContentRenderer :value="post" />
       <div class="end">
-        <NuxtLink to="/blog">← Back to blog</NuxtLink>
+        <NuxtLink to="/blog">
+          ← Back to blog
+        </NuxtLink>
         <a href="#top">Back to top ↑</a>
       </div>
     </article>
@@ -35,22 +46,31 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'BlogArticle',
-  
-  async setup() {
+
+  setup() {
     const route = useRoute()
-    const { data: post } = await useAsyncData(`blog-${route.params.slug}`, () =>
-      queryContent('blog', route.params.slug as string).findOne()
+    const { data: post } = useAsyncData(`blog-${route.params.slug}`, () =>
+      queryContent('blog', route.params.slug as string).findOne(),
     )
-    
-    if (!post.value || post.value.draft) {
-      throw createError({ statusCode: 404, statusMessage: 'Article not found' })
-    }
-    
+
     return {
-      post
+      post,
     }
   },
-  
+
+  head() {
+    if (!this.post) return {}
+    return {
+      title: `${this.post.title} — Alex Mosneagu`,
+      meta: [
+        {
+          name: 'description',
+          content: this.post.ex,
+        },
+      ],
+    }
+  },
+
   computed: {
     articleTitle(): string {
       if (!this.post) return ''
@@ -60,21 +80,8 @@ export default defineComponent({
       const parts = this.post.title.split(' ')
       const lastWord = parts.pop()
       return `${parts.join(' ')} <em>${lastWord}.</em>`
-    }
+    },
   },
-  
-  head() {
-    if (!this.post) return {}
-    return {
-      title: `${this.post.title} — Alex Mosneagu`,
-      meta: [
-        {
-          name: 'description',
-          content: this.post.ex
-        }
-      ]
-    }
-  }
 })
 </script>
 
@@ -232,11 +239,11 @@ export default defineComponent({
   .ph {
     padding: 130px 0 50px;
   }
-  
+
   .post {
     padding: 0 20px;
   }
-  
+
   .post :deep(p) {
     font-size: 18px;
   }

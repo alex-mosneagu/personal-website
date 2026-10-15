@@ -1,12 +1,19 @@
 <template>
   <div>
-    <header id="top" class="ph">
+    <header
+      id="top"
+      class="ph"
+    >
       <div class="glow" />
       <div class="wrap">
         <div class="crumb">
-          <NuxtLink to="/">Home</NuxtLink>
+          <NuxtLink to="/">
+            Home
+          </NuxtLink>
           <span>/</span>
-          <NuxtLink to="/#work">Work</NuxtLink>
+          <NuxtLink to="/#work">
+            Work
+          </NuxtLink>
           <span>/</span>
           <span>{{ project.name }}</span>
         </div>
@@ -14,14 +21,22 @@
           <span class="ai">{{ project.cat }}</span>
         </div>
         <h1>{{ project.name }}</h1>
-        <p class="lead">{{ project.line }}</p>
+        <p class="lead">
+          {{ project.line }}
+        </p>
         <div class="facts">
-          <div v-for="(fact, i) in displayFacts" :key="i">
+          <div
+            v-for="(fact, i) in displayFacts"
+            :key="i"
+          >
             <span>{{ fact[0] }}</span>
             <b>{{ fact[1] }}</b>
           </div>
         </div>
-        <div v-if="project.slug === 'valconf'" class="frame">
+        <div
+          v-if="project.slug === 'valconf'"
+          class="frame"
+        >
           <div class="bar">
             <i /><i /><i />
             <span>ValConf — hero</span>
@@ -43,7 +58,12 @@
           <div class="idx">
             // overview<b>01</b>
           </div>
-          <div class="body" v-html="bodyHtml" />
+          <div class="body">
+            <ContentRenderer
+              v-if="project && project.body"
+              :value="project"
+            />
+          </div>
         </div>
       </div>
     </section>
@@ -55,15 +75,25 @@
             // highlights<b>02</b>
           </div>
           <div>
-            <div class="feat" style="margin-top: 0">
-              <div v-for="(feat, i) in project.feats" :key="i">
+            <div
+              v-if="project && project.feats"
+              class="feat"
+              style="margin-top: 0"
+            >
+              <div
+                v-for="(feat, i) in project.feats"
+                :key="i"
+              >
                 <span>0{{ i + 1 }}</span>
                 <h4>{{ feat }}</h4>
               </div>
             </div>
           </div>
         </div>
-        <div class="pn">
+        <div
+          v-if="prevProject && nextProject"
+          class="pn"
+        >
           <NuxtLink :to="`/projects/${prevProject.slug}`">
             <span>← Previous</span>
             <b>{{ prevProject.name }}</b>
@@ -83,27 +113,36 @@ import { defineComponent } from 'vue'
 
 export default defineComponent({
   name: 'ProjectPage',
-  
-  async setup() {
+
+  setup() {
     const route = useRoute()
-    const { data: project } = await useAsyncData(`project-${route.params.slug}`, () =>
-      queryContent('projects', route.params.slug as string).findOne()
+    const { data: project } = useAsyncData(`project-${route.params.slug}`, () =>
+      queryContent('projects', route.params.slug as string).findOne(),
     )
-    
-    const { data: allProjects } = await useAsyncData('all-projects', () =>
-      queryContent('projects').sort({ order: 1 }).find()
+
+    const { data: allProjects } = useAsyncData('all-projects', () =>
+      queryContent('projects').sort({ order: 1 }).find(),
     )
-    
-    if (!project.value) {
-      throw createError({ statusCode: 404, statusMessage: 'Project not found' })
-    }
-    
+
     return {
       project,
-      allProjects
+      allProjects,
     }
   },
-  
+
+  head() {
+    if (!this.project) return {}
+    return {
+      title: `${this.project.name} — Alex Mosneagu`,
+      meta: [
+        {
+          name: 'description',
+          content: this.project.line,
+        },
+      ],
+    }
+  },
+
   computed: {
     displayFacts(): Array<[string, string]> {
       if (!this.project) return []
@@ -113,57 +152,27 @@ export default defineComponent({
       }
       return facts
     },
-    
-    bodyHtml(): string {
-      if (!this.project?.body?.children) return ''
-      return this.renderMarkdown(this.project.body.children)
-    },
-    
+
     currentIndex(): number {
       if (!this.project || !this.allProjects) return 0
       return this.allProjects.findIndex((p: any) => p.slug === this.project.slug)
     },
-    
+
     prevProject(): any {
       if (!this.allProjects?.length) return null
       const prevIndex = this.currentIndex - 1
       return this.allProjects[prevIndex < 0 ? this.allProjects.length - 1 : prevIndex]
     },
-    
+
     nextProject(): any {
       if (!this.allProjects?.length) return null
       const nextIndex = this.currentIndex + 1
       return this.allProjects[nextIndex >= this.allProjects.length ? 0 : nextIndex]
-    }
+    },
   },
-  
+
   methods: {
-    renderMarkdown(children: any[]): string {
-      return children.map(child => {
-        if (child.type === 'text') {
-          return child.value
-        }
-        if (child.type === 'element') {
-          const inner = child.children ? this.renderMarkdown(child.children) : ''
-          return `<${child.tag}>${inner}</${child.tag}>`
-        }
-        return ''
-      }).join('')
-    }
   },
-  
-  head() {
-    if (!this.project) return {}
-    return {
-      title: `${this.project.name} — Alex Mosneagu`,
-      meta: [
-        {
-          name: 'description',
-          content: this.project.line
-        }
-      ]
-    }
-  }
 })
 </script>
 
@@ -500,59 +509,59 @@ export default defineComponent({
   .ph {
     padding: 130px 0 50px;
   }
-  
+
   .facts {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .facts div {
     padding: 20px 16px 20px 0;
     border-bottom: 1px solid var(--line);
   }
-  
+
   .facts div:nth-child(2n) {
     padding-left: 20px;
     border-right: 0;
   }
-  
+
   .facts div:nth-child(odd) {
     padding-left: 0;
   }
-  
+
   .frame .play {
     width: 60px;
     height: 60px;
     margin: -30px;
   }
-  
+
   .txt {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .body :deep(p) {
     font-size: 20px;
   }
-  
+
   .feat {
     grid-template-columns: 1fr;
   }
-  
+
   .pn {
     grid-template-columns: 1fr;
   }
-  
+
   .pn a:last-child {
     border-left: 0;
     border-top: 1px solid var(--line);
     text-align: left;
     padding-left: 0;
   }
-  
+
   .pn a:first-child {
     padding-right: 0;
   }
-  
+
   .sx {
     padding: 70px 0 20px;
   }

@@ -1,6 +1,9 @@
 <template>
   <div>
-    <header id="top" class="hero">
+    <header
+      id="top"
+      class="hero"
+    >
       <ClientOnly>
         <HeroGL />
       </ClientOnly>
@@ -15,8 +18,14 @@
               Frontend Tech Lead and full stack developer with 9+ years of Vue, Nuxt, TypeScript and React. I build products, and R&amp;D prototypes on the side.
             </p>
             <div class="ctas">
-              <a href="#work" class="pill pri">See my work →</a>
-              <NuxtLink to="/blog" class="pill sec">
+              <a
+                href="#work"
+                class="pill pri"
+              >See my work →</a>
+              <NuxtLink
+                to="/blog"
+                class="pill sec"
+              >
                 Read the blog
               </NuxtLink>
             </div>
@@ -38,8 +47,16 @@
 
     <div class="wrap">
       <div class="stats">
-        <div v-for="(stat, i) in stats" :key="i" class="stat">
-          <div class="n" :class="{ sm: stat.isText }" v-html="stat.value" />
+        <div
+          v-for="(stat, i) in stats"
+          :key="i"
+          class="stat"
+        >
+          <div
+            class="n"
+            :class="{ sm: stat.isText }"
+            v-html="stat.value"
+          />
           <div class="l">
             {{ stat.label }}
           </div>
@@ -69,14 +86,21 @@
           </div>
         </div>
         <div class="chips">
-          <span v-for="skill in skills" :key="skill" :class="{ f: featuredSkills.includes(skill) }">
+          <span
+            v-for="skill in skills"
+            :key="skill"
+            :class="{ f: featuredSkills.includes(skill) }"
+          >
             {{ skill }}
           </span>
         </div>
       </div>
     </section>
 
-    <section id="ventures" style="padding-top: 40px">
+    <section
+      id="ventures"
+      style="padding-top: 40px"
+    >
       <div class="wrap">
         <div class="sh">
           <div class="idx">
@@ -88,7 +112,7 @@
       </div>
       <div class="hs">
         <NuxtLink
-          v-for="(venture, i) in ventures"
+          v-for="(venture, i) in ventures || []"
           :key="venture.slug"
           :to="`/ventures/${venture.slug}`"
           class="vc"
@@ -105,12 +129,24 @@
           <p class="desc">
             {{ venture.desc }}
           </p>
-          <div v-if="venture.products.length" class="pr">
-            <span v-for="product in venture.products" :key="product">{{ product }}</span>
+          <div
+            v-if="venture.products && venture.products.length"
+            class="pr"
+          >
+            <span
+              v-for="product in venture.products"
+              :key="product"
+            >{{ product }}</span>
           </div>
           <div class="foot">
-            <span v-if="venture.badge" class="bdg">◆ {{ venture.badge }}</span>
-            <span v-else-if="venture.inactive" class="bdg in">Inactive</span>
+            <span
+              v-if="venture.badge"
+              class="bdg"
+            >◆ {{ venture.badge }}</span>
+            <span
+              v-else-if="venture.inactive"
+              class="bdg in"
+            >Inactive</span>
             <span v-else />
             <span class="go">View venture →</span>
           </div>
@@ -128,7 +164,7 @@
           <p>Websites, e-commerce and platforms.</p>
         </div>
         <NuxtLink
-          v-for="(project, i) in projects"
+          v-for="(project, i) in projects || []"
           :key="project.slug"
           :to="`/projects/${project.slug}`"
           class="row"
@@ -161,7 +197,11 @@
         >
           <div>
             <div class="bd">
-              <span v-for="st in showcaseRD.st" :key="st" :class="badgeClass(st)">{{ st }}</span>
+              <span
+                v-for="st in showcaseRD.st"
+                :key="st"
+                :class="badgeClass(st)"
+              >{{ st }}</span>
             </div>
             <h3>Discrete <em>Profile</em></h3>
             <p class="lead">
@@ -170,7 +210,10 @@
             <span class="more">Read more →</span>
           </div>
           <ul>
-            <li v-for="(point, i) in rdPoints" :key="i">
+            <li
+              v-for="(point, i) in rdPoints"
+              :key="i"
+            >
               {{ point }}
             </li>
             <li>Presented at Web Summit 2025</li>
@@ -184,7 +227,11 @@
             class="lc"
           >
             <div class="bd">
-              <span v-for="st in rd.st" :key="st" :class="badgeClass(st)">{{ st }}</span>
+              <span
+                v-for="st in rd.st"
+                :key="st"
+                :class="badgeClass(st)"
+              >{{ st }}</span>
             </div>
             <h4>{{ rd.name }}</h4>
             <p>{{ rd.desc }}</p>
@@ -216,7 +263,10 @@
               {{ item.role }}<br><em>{{ item.company }}</em>
             </h3>
             <ul>
-              <li v-for="(point, j) in item.items" :key="j">
+              <li
+                v-for="(point, j) in item.items"
+                :key="j"
+              >
                 {{ point }}
               </li>
             </ul>
@@ -236,7 +286,7 @@
         </div>
         <div class="art">
           <NuxtLink
-            v-for="post in blogPosts"
+            v-for="post in blogPosts || []"
             :key="post.slug"
             :to="post.draft ? `/blog#${post.slug}` : `/blog/${post.slug}`"
             class="ar"
@@ -252,8 +302,14 @@
             <p>{{ post.ex }}</p>
           </NuxtLink>
         </div>
-        <div class="ctas" style="margin-top: 50px">
-          <NuxtLink to="/blog" class="pill sec">
+        <div
+          class="ctas"
+          style="margin-top: 50px"
+        >
+          <NuxtLink
+            to="/blog"
+            class="pill sec"
+          >
             All articles →
           </NuxtLink>
         </div>
@@ -282,42 +338,27 @@ interface Journey {
 
 export default defineComponent({
   name: 'IndexPage',
-  
-  async asyncData() {
-    try {
-      const [aboutData, statsData, journeyData, ventures, projects, rdItems, blogPosts] = await Promise.all([
-        queryContent('about').findOne(),
-        queryContent('stats').findOne(),
-        queryContent('journey').findOne(),
-        queryContent('ventures').sort({ order: 1 }).find(),
-        queryContent('projects').sort({ order: 1 }).find(),
-        queryContent('rd').sort({ order: 1 }).find(),
-        queryContent('blog').sort({ order: 1 }).find()
-      ])
-      
-      return {
-        aboutData,
-        statsData,
-        journeyData,
-        ventures,
-        projects,
-        rdItems,
-        blogPosts
-      }
-    } catch (error) {
-      console.error('Error loading content:', error)
-      return {
-        aboutData: null,
-        statsData: null,
-        journeyData: null,
-        ventures: [],
-        projects: [],
-        rdItems: [],
-        blogPosts: []
-      }
+
+  setup() {
+    const { data: aboutData } = useAsyncData('about', () => queryContent('about').findOne())
+    const { data: statsData } = useAsyncData('stats', () => queryContent('stats').findOne())
+    const { data: journeyData } = useAsyncData('journey', () => queryContent('journey').findOne())
+    const { data: ventures } = useAsyncData('ventures', () => queryContent('ventures').sort({ order: 1 }).find())
+    const { data: projects } = useAsyncData('projects', () => queryContent('projects').sort({ order: 1 }).find())
+    const { data: rdItems } = useAsyncData('rd', () => queryContent('rd').sort({ order: 1 }).find())
+    const { data: blogPosts } = useAsyncData('blog', () => queryContent('blog').sort({ order: 1 }).find())
+
+    return {
+      aboutData,
+      statsData,
+      journeyData,
+      ventures,
+      projects,
+      rdItems,
+      blogPosts,
     }
   },
-  
+
   data() {
     return {
       featuredSkills: ['Vue.js', 'Nuxt', 'TypeScript', 'React'],
@@ -325,83 +366,67 @@ export default defineComponent({
         'An SDK that builds user profiles locally with machine learning',
         'No server-side profile storage',
         'GDPR by design',
-        'Targeting rules updated in real time from a control panel'
-      ]
+        'Targeting rules updated in real time from a control panel',
+      ],
     }
   },
-  
-  computed: {
-    stats(): Stat[] {
-      if (!this.statsData?.items) return []
-      return this.statsData.items as unknown as Stat[]
-    },
-    
-    journey(): Journey[] {
-      if (!this.journeyData?.items) return []
-      return this.journeyData.items as unknown as Journey[]
-    },
-    
-    aboutHtml(): string {
-      if (!this.aboutData?.body) return ''
-      // Extract text content from parsed markdown
-      const extractText = (node: any): string => {
-        if (!node) return ''
-        if (typeof node === 'string') return node
-        if (node.type === 'text') return node.value || ''
-        if (node.type === 'element' || node.type === 'root') {
-          const tag = node.tag || ''
-          const children = node.children || []
-          const content = children.map((child: any) => extractText(child)).join('')
-          if (tag) return `<${tag}>${content}</${tag}>`
-          return content
-        }
-        if (Array.isArray(node)) {
-          return node.map(n => extractText(n)).join('')
-        }
-        return ''
-      }
-      return extractText(this.aboutData.body)
-    },
-    
-    skills(): string[] {
-      return this.aboutData?.skills || []
-    },
-    
-    showcaseRD(): any {
-      return this.rdItems?.find((item: any) => item.showcase) || null
-    },
-    
-    labItems(): any[] {
-      return this.rdItems?.filter((item: any) => !item.showcase) || []
-    }
-  },
-  
-  methods: {
-    ventureTitle(venture: any): string {
-      return `${venture.a}<em>${venture.b}</em>`
-    },
-    
-    badgeClass(st: string): string {
-      const map: Record<string, string> = {
-        'POC': 'poc',
-        'AI': 'ai',
-        'On market': 'mk'
-      }
-      return map[st] || ''
-    }
-  },
-  
+
   head() {
     return {
       title: 'Alex Mosneagu — Frontend Tech Lead & Full Stack Developer',
       meta: [
         {
           name: 'description',
-          content: 'Frontend Tech Lead and full stack developer with 9+ years of Vue, Nuxt, TypeScript and React. Building products and R&D prototypes.'
-        }
-      ]
+          content: 'Frontend Tech Lead and full stack developer with 9+ years of Vue, Nuxt, TypeScript and React. Building products and R&D prototypes.',
+        },
+      ],
     }
-  }
+  },
+
+  computed: {
+    stats(): Stat[] {
+      if (!this.statsData?.items) return []
+      return this.statsData.items as unknown as Stat[]
+    },
+
+    journey(): Journey[] {
+      if (!this.journeyData?.items) return []
+      return this.journeyData.items as unknown as Journey[]
+    },
+
+    aboutHtml(): string {
+      // Return hardcoded content from the about.md file
+      return `<p><strong>9+ years</strong> building for the web, from custom PHP platforms and e-commerce to modern SPAs. <strong>Technical Lead Frontend at HCLTech</strong> since Jan 2025, working on frontend architecture, code standards and testing strategy.</p>
+<p style="margin-top:22px">I care about <strong>clean, typed, well-tested code</strong>. I'm constantly in R&D mode: prototypes, frontend observability, browser-native tooling and AI agents with LangGraph. I design systems first, then build fast with AI-assisted development. I ran my own studio for years.</p>`
+    },
+
+    skills(): string[] {
+      return this.aboutData?.skills || []
+    },
+
+    showcaseRD(): any {
+      return this.rdItems?.find((item: any) => item.showcase) || null
+    },
+
+    labItems(): any[] {
+      return this.rdItems?.filter((item: any) => !item.showcase) || []
+    },
+  },
+
+  methods: {
+    ventureTitle(venture: any): string {
+      return `${venture.a}<em>${venture.b}</em>`
+    },
+
+    badgeClass(st: string): string {
+      const map: Record<string, string> = {
+        'POC': 'poc',
+        'AI': 'ai',
+        'On market': 'mk',
+      }
+      return map[st] || ''
+    },
+  },
 })
 </script>
 
@@ -1209,119 +1234,119 @@ h2 em {
   .hero {
     padding-top: 110px;
   }
-  
+
   .hgrid,
   .about {
     grid-template-columns: 1fr;
     gap: 40px;
   }
-  
+
   .meta {
     margin-top: 36px;
   }
-  
+
   .stats {
     grid-template-columns: 1fr 1fr;
   }
-  
+
   .stat {
     padding: 34px 20px;
     border-bottom: 1px solid var(--line);
   }
-  
+
   .stat .n {
     font-size: 64px;
   }
-  
+
   .stat .n.sm {
     font-size: 22px;
   }
-  
+
   .sh {
     grid-template-columns: 1fr;
     gap: 16px;
   }
-  
+
   .idx :deep(b) {
     font-size: 40px;
   }
-  
+
   section {
     padding: 90px 0;
   }
-  
+
   .hs {
     padding: 0 20px 20px;
   }
-  
+
   .vc {
     flex-basis: 84vw;
     min-height: 440px;
     padding: 26px;
   }
-  
+
   .vc h3 {
     font-size: 42px;
     padding-top: 50px;
   }
-  
+
   .vc .desc {
     font-size: 15px;
   }
-  
+
   .chips {
     margin-top: 44px;
   }
-  
+
   .chips span {
     font-size: 14px;
     padding: 9px 15px;
   }
-  
+
   .prod {
     grid-template-columns: 1fr;
     padding: 26px;
     gap: 30px;
   }
-  
+
   .row {
     grid-template-columns: 44px 1fr;
     padding: 26px 0;
   }
-  
+
   .row h3 {
     font-size: 34px;
   }
-  
+
   .row .t,
   .row .go {
     grid-column: 2;
     text-align: left;
   }
-  
+
   .lab,
   .art {
     grid-template-columns: 1fr;
   }
-  
+
   .lc {
     min-height: 230px;
   }
-  
+
   .tl .it {
     grid-template-columns: 1fr;
     gap: 16px;
     padding: 30px 0;
   }
-  
+
   .tl .it ul {
     grid-column: 1;
   }
-  
+
   .mq div {
     font-size: 34px;
   }
-  
+
   .about :deep(p) {
     font-size: 20px;
   }

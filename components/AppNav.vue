@@ -1,13 +1,41 @@
 <template>
   <nav class="nav">
-    <NuxtLink to="/" class="logo">
+    <NuxtLink
+      to="/"
+      class="logo"
+    >
       alex<span>.</span>m
     </NuxtLink>
-    <NuxtLink to="/#work" class="lk">Work</NuxtLink>
-    <NuxtLink to="/#ventures" class="lk">Ventures</NuxtLink>
-    <NuxtLink to="/#rd" class="lk">R&amp;D</NuxtLink>
-    <NuxtLink to="/#journey" class="lk">Journey</NuxtLink>
-    <NuxtLink to="/blog" class="talk">Blog</NuxtLink>
+    <NuxtLink
+      to="/#work"
+      class="lk"
+    >
+      Work
+    </NuxtLink>
+    <NuxtLink
+      to="/#ventures"
+      class="lk"
+    >
+      Ventures
+    </NuxtLink>
+    <NuxtLink
+      to="/#rd"
+      class="lk"
+    >
+      R&amp;D
+    </NuxtLink>
+    <NuxtLink
+      to="/#journey"
+      class="lk"
+    >
+      Journey
+    </NuxtLink>
+    <NuxtLink
+      to="/blog"
+      class="talk"
+    >
+      Blog
+    </NuxtLink>
   </nav>
 </template>
 
@@ -15,7 +43,7 @@
 import { defineComponent } from 'vue'
 
 export default defineComponent({
-  name: 'AppNav'
+  name: 'AppNav',
 })
 </script>
 
@@ -73,17 +101,17 @@ export default defineComponent({
     gap: 0;
     max-width: calc(100vw - 16px);
   }
-  
+
   .lk {
     display: block;
     padding: 9px 7px;
     font-size: 12.5px;
   }
-  
+
   .logo {
     margin-right: 6px;
   }
-  
+
   .talk {
     padding: 9px 13px;
     font-size: 12.5px;
