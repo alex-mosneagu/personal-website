@@ -1,0 +1,33 @@
+- when: Jan 2025 – Present
+  isNow: true
+  company: HCLTech
+  role: Technical Lead
+  items:
+    - Own frontend architecture and technical decisions
+    - Code standards, review practices, testing strategy (unit and E2E)
+    - Collaborate with product and backend
+    - Guide developers
+
+- when: Jun 2023 – Feb 2025
+  company: Spark Radiance
+  role: Frontend Developer
+  items:
+    - Vue.js apps and reusable components
+    - Performance and UX
+    - Unit and E2E tests
+    - CI/CD
+
+- when: 2016 – now inactive
+  company: Old Studio Concept
+  role: Founder & Full-Stack Developer
+  items:
+    - PHP / Laravel / Symfony / Slim
+    - E-commerce on WordPress and custom MVC
+    - CI/CD deploys
+    - Vue and React SPAs, UI/UX
+
+- when: 2019 – 2022
+  company: Titu Maiorescu University
+  role: Computer Science
+  isEducation: true
+  items: []

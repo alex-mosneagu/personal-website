@@ -1,0 +1,29 @@
+# Nuxt
+.nuxt
+.output
+.env
+dist
+
+# Node
+node_modules
+*.log*
+.DS_Store
+.idea
+.vscode
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Build
+.nitro
+.cache
+
+# Testing
+coverage
+.vitest
+
+# Local
+.env.local
+.env.*.local
