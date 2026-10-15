@@ -49,6 +49,30 @@ export default defineNuxtConfig({
       crawlLinks: true
     }
   },
+  
+  hooks: {
+    async 'nitro:config'(nitroConfig) {
+      // Add content routes for prerendering
+      const slugs = {
+        ventures: ['liveflow', 'devolution-zone', 'old-studio-concept', 'let-go-trading'],
+        projects: ['valconf', 'privasee360', 'luce-2025-shop', 'anteco-brun', 'nextservice', 'liveflow-academy'],
+        rd: ['utilitara', 'one-cool-hub', 'nextservice', 'carpat', 'acttrace', 'ai-lead-generation', 'discrete-profile']
+      }
+      
+      const routes = [
+        ...slugs.ventures.map(s => `/ventures/${s}`),
+        ...slugs.projects.map(s => `/projects/${s}`),
+        ...slugs.rd.map(s => `/rd/${s}`)
+      ]
+      
+      nitroConfig.prerender = nitroConfig.prerender || {}
+      nitroConfig.prerender.routes = nitroConfig.prerender.routes || []
+      
+      if (Array.isArray(nitroConfig.prerender.routes)) {
+        nitroConfig.prerender.routes.push(...routes)
+      }
+    }
+  },
 
   runtimeConfig: {
     public: {
