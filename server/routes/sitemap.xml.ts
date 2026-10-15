@@ -22,10 +22,10 @@ export default defineEventHandler(async (event) => {
   ]
 
   const dynamicPages = [
-    ...ventures.map((v: ContentItem) => `/ventures/${v.slug}`),
-    ...projects.map((p: ContentItem) => `/projects/${p.slug}`),
-    ...rd.map((r: ContentItem) => `/rd/${r.slug}`),
-    ...blog.map((b: ContentItem) => `/blog/${b.slug}`),
+    ...(ventures as ContentItem[]).map(v => `/ventures/${v.slug}`),
+    ...(projects as ContentItem[]).map(p => `/projects/${p.slug}`),
+    ...(rd as ContentItem[]).map(r => `/rd/${r.slug}`),
+    ...(blog as ContentItem[]).map(b => `/blog/${b.slug}`),
   ]
 
   const allPages = [...staticPages, ...dynamicPages]

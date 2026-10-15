@@ -351,29 +351,12 @@ interface Venture extends ParsedContent {
   order: number
 }
 
-interface _Project extends ParsedContent {
-  slug: string
-  name: string
-  tag: string
-  cat: string
-  line: string
-  order: number
-}
-
 interface RDItem extends ParsedContent {
   slug: string
   name: string
   desc: string
   st: string[]
   showcase?: boolean
-  order: number
-}
-
-interface _BlogPost extends ParsedContent {
-  slug: string
-  n: string
-  tag: string
-  draft?: boolean
   order: number
 }
 

@@ -73,7 +73,7 @@ export default defineComponent({
 
   computed: {
     articleTitle(): string {
-      if (!this.post) return ''
+      if (!this.post?.title) return ''
       if (this.post.slug === 'options-api-nuxt') {
         return 'Structuring a Nuxt project with the <em>Options API.</em>'
       }

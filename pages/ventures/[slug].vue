@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="venture">
     <header
       id="top"
       class="ph"

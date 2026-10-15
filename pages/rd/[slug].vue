@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="rd">
     <header
       id="top"
       class="ph"

@@ -16,9 +16,9 @@ export default defineEventHandler(async (event) => {
   ])
 
   const routes = [
-    ...ventures.map((v: ContentItem) => `/ventures/${v.slug}`),
-    ...projects.map((p: ContentItem) => `/projects/${p.slug}`),
-    ...rd.map((r: ContentItem) => `/rd/${r.slug}`),
+    ...(ventures as ContentItem[]).map(v => `/ventures/${v.slug}`),
+    ...(projects as ContentItem[]).map(p => `/projects/${p.slug}`),
+    ...(rd as ContentItem[]).map(r => `/rd/${r.slug}`),
   ]
 
   return {

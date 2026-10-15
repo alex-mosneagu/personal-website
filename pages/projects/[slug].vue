@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div v-if="project">
     <header
       id="top"
       class="ph"
