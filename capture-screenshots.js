@@ -1,7 +1,7 @@
 import { promises as fs } from 'fs'
 import { chromium } from 'playwright-core'
 
-const baseUrl = 'http://localhost:3000'
+const baseUrl = 'http://localhost:3001'
 
 async function capture() {
   const browser = await chromium.launch({
